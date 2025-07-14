@@ -30,26 +30,72 @@
 		<java.version>21</java.version>
 	</properties>
 	<dependencies>
+		<!-- ============================================================================= -->
+		<!-- CORE SPRING BOOT DEPENDENCIES -->
+		<!-- ============================================================================= -->
+		
+		<!-- Spring Boot Starter Data JPA -->
+		<!-- Provides JPA/Hibernate support for database operations -->
+		<!-- Includes: Hibernate, Spring Data JPA, Transaction management -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+		
+		<!-- Spring Boot Starter Web -->
+		<!-- Provides web application support including REST API capabilities -->
+		<!-- Includes: Spring MVC, Tomcat server, Jackson for JSON processing -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		
+		<!-- Spring Boot Starter Validation -->
+		<!-- Provides Bean Validation support for input validation -->
+		<!-- Includes: Jakarta Validation (Bean Validation), @NotNull, @Size, @Pattern, etc. -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-validation</artifactId>
+		</dependency>
+		
+		<!-- Spring Boot Starter Actuator -->
+		<!-- Provides monitoring and management endpoints for the application -->
+		<!-- Includes: Health checks, metrics, application info, environment info -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
 
+		<!-- ============================================================================= -->
+		<!-- DEVELOPMENT AND RUNTIME DEPENDENCIES -->
+		<!-- ============================================================================= -->
+		
+		<!-- Spring Boot DevTools -->
+		<!-- Provides development-time features like automatic restart and live reload -->
+		<!-- Includes: Automatic restart when files change, live reload for web pages -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
+		
+		<!-- H2 Database -->
+		<!-- In-memory database for development and testing -->
+		<!-- Provides: Fast startup, no installation required, web console for database management -->
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+		
+		<!-- ============================================================================= -->
+		<!-- TESTING DEPENDENCIES -->
+		<!-- ============================================================================= -->
+		
+		<!-- Spring Boot Starter Test -->
+		<!-- Provides testing support for Spring Boot applications -->
+		<!-- Includes: JUnit, Spring Test, AssertJ, Mockito, JSONassert, JSONPath -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
