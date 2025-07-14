@@ -11,6 +11,6 @@ public final class RouteConstants {
     }
     
     // Employee routes
-    public static final String EMPLOYEE_BASE = "/employee";
+    public static final String EMPLOYEE_BASE = "/employees";
     public static final String EMPLOYEE_CREATE = "/create";
 } 

@@ -3,6 +3,7 @@ package in.masti.entity;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "employee")
@@ -16,6 +17,8 @@ public class Employee {
     private String designation;
     private LocalDate dob;
     private String company;
+    @Transient
+    private LocalDateTime creationTime = LocalDateTime.now();
 
     public Integer getEmpId() {
         return empId;
@@ -55,5 +58,13 @@ public class Employee {
 
     public void setCompany(String company) {
         this.company = company;
+    }
+
+    public LocalDateTime getCreationTime() {
+        return creationTime;
+    }
+
+    public void setCreationTime(LocalDateTime creationTime) {
+        this.creationTime = creationTime;
     }
 }
