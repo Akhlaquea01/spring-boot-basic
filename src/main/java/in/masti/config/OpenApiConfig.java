@@ -96,10 +96,10 @@ public class OpenApiConfig {
                                 .url("https://opensource.org/licenses/MIT")))
                 .servers(List.of(
                         new Server()
-                                .url("http://localhost:8080")
+                                .url("http://localhost:8080/api")
                                 .description("Development Server"),
                         new Server()
-                                .url("https://api.employeemanagement.com")
+                                .url("https://api.employeemanagement.com/api")
                                 .description("Production Server")
                 ));
     }
