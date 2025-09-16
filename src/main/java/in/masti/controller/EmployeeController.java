@@ -3,6 +3,14 @@ package in.masti.controller;
 import in.masti.constants.RouteConstants;
 import in.masti.entity.Employee;
 import in.masti.service.EmployeeService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,6 +57,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping(RouteConstants.EMPLOYEE_BASE)
 @Validated
+@Tag(name = "Employee Management", description = "APIs for managing employee data with full CRUD operations")
 public class EmployeeController {
     
     private static final Logger logger = LoggerFactory.getLogger(EmployeeController.class);
@@ -74,8 +83,62 @@ public class EmployeeController {
      * @param employee The employee data to create (validated)
      * @return ResponseEntity containing the created employee with HTTP 201 status
      */
+    @Operation(
+        summary = "Create a new employee",
+        description = "Creates a new employee record in the database with the provided information. " +
+                     "The employee ID will be auto-generated. All validation rules apply."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "201",
+            description = "Employee created successfully",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = Employee.class),
+                examples = @ExampleObject(
+                    name = "Created Employee",
+                    value = """
+                    {
+                        "empId": 101,
+                        "name": "John Doe",
+                        "designation": "Software Engineer",
+                        "dob": "1990-05-15",
+                        "company": "Tech Corp",
+                        "creationTime": "2024-01-15T10:30:00"
+                    }
+                    """
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "400",
+            description = "Invalid input data - validation failed",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "Validation Error",
+                    value = """
+                    {
+                        "timestamp": "2024-01-15T10:30:00",
+                        "status": 400,
+                        "error": "Bad Request",
+                        "message": "Validation failed",
+                        "fieldErrors": [
+                            {
+                                "field": "name",
+                                "message": "Name must be between 2 and 20 characters"
+                            }
+                        ]
+                    }
+                    """
+                )
+            )
+        )
+    })
     @PostMapping(RouteConstants.EMPLOYEE_CREATE)
-    public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
+    public ResponseEntity<Employee> createEmployee(
+        @Parameter(description = "Employee data to create", required = true)
+        @Valid @RequestBody Employee employee) {
         logger.info("Creating new employee: {}", employee.getName());
         
         try {
@@ -95,6 +158,43 @@ public class EmployeeController {
      * 
      * @return ResponseEntity containing list of all employees with HTTP 200 status
      */
+    @Operation(
+        summary = "Get all employees",
+        description = "Retrieves a list of all employees in the database. Returns an empty list if no employees exist."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Successfully retrieved all employees",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = Employee.class),
+                examples = @ExampleObject(
+                    name = "Employee List",
+                    value = """
+                    [
+                        {
+                            "empId": 101,
+                            "name": "John Doe",
+                            "designation": "Software Engineer",
+                            "dob": "1990-05-15",
+                            "company": "Tech Corp",
+                            "creationTime": "2024-01-15T10:30:00"
+                        },
+                        {
+                            "empId": 102,
+                            "name": "Jane Smith",
+                            "designation": "Product Manager",
+                            "dob": "1988-12-03",
+                            "company": "Tech Corp",
+                            "creationTime": "2024-01-15T10:35:00"
+                        }
+                    ]
+                    """
+                )
+            )
+        )
+    })
     @GetMapping(RouteConstants.EMPLOYEE_GET_ALL)
     public ResponseEntity<List<Employee>> getAllEmployees() {
         logger.info("Retrieving all employees");
@@ -117,8 +217,55 @@ public class EmployeeController {
      * @param id The employee ID (path variable)
      * @return ResponseEntity containing the employee with HTTP 200 status, or 404 if not found
      */
+    @Operation(
+        summary = "Get employee by ID",
+        description = "Retrieves a specific employee by their unique ID. Returns 404 if the employee is not found."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(
+            responseCode = "200",
+            description = "Employee found and returned successfully",
+            content = @Content(
+                mediaType = "application/json",
+                schema = @Schema(implementation = Employee.class),
+                examples = @ExampleObject(
+                    name = "Employee Details",
+                    value = """
+                    {
+                        "empId": 101,
+                        "name": "John Doe",
+                        "designation": "Software Engineer",
+                        "dob": "1990-05-15",
+                        "company": "Tech Corp",
+                        "creationTime": "2024-01-15T10:30:00"
+                    }
+                    """
+                )
+            )
+        ),
+        @ApiResponse(
+            responseCode = "404",
+            description = "Employee not found",
+            content = @Content(
+                mediaType = "application/json",
+                examples = @ExampleObject(
+                    name = "Not Found",
+                    value = """
+                    {
+                        "timestamp": "2024-01-15T10:30:00",
+                        "status": 404,
+                        "error": "Not Found",
+                        "message": "Employee not found with ID: 999"
+                    }
+                    """
+                )
+            )
+        )
+    })
     @GetMapping(RouteConstants.EMPLOYEE_GET_BY_ID)
-    public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id) {
+    public ResponseEntity<Employee> getEmployeeById(
+        @Parameter(description = "Employee ID to retrieve", required = true, example = "101")
+        @PathVariable Integer id) {
         logger.info("Retrieving employee with ID: {}", id);
         
         try {

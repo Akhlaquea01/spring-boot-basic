@@ -1,5 +1,6 @@
 package in.masti.entity;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
  */
 @Entity
 @Table(name = "employee")
+@Schema(description = "Employee entity representing an employee in the system")
 public class Employee {
     
     /**
@@ -32,6 +34,7 @@ public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "emp_id_generator")
     @SequenceGenerator(name = "emp_id_generator", sequenceName = "emp_id_seq", initialValue = 101, allocationSize = 1)
+    @Schema(description = "Unique employee identifier", example = "101", accessMode = Schema.AccessMode.READ_ONLY)
     private Integer empId;
     
     /**
@@ -45,6 +48,7 @@ public class Employee {
     @NotNull(message = "Employee name is required")
     @Size(min = 2, max = 20, message = "Name must be between 2 and 20 characters")
     @Pattern(regexp = "^[a-zA-Z\\s-]+$", message = "Name can only contain letters, spaces, and hyphens")
+    @Schema(description = "Employee full name", example = "John Doe", required = true, minLength = 2, maxLength = 20)
     private String name;
     
     /**
@@ -53,6 +57,7 @@ public class Employee {
      * @Size ensures the designation is not too long
      */
     @Size(max = 50, message = "Designation cannot exceed 50 characters")
+    @Schema(description = "Employee job title or designation", example = "Software Engineer", maxLength = 50)
     private String designation;
     
     /**
@@ -61,6 +66,7 @@ public class Employee {
      * @Past ensures the date is in the past
      */
     @Past(message = "Date of birth must be in the past")
+    @Schema(description = "Employee date of birth", example = "1990-05-15", type = "string", format = "date")
     private LocalDate dob;
     
     /**
@@ -69,6 +75,7 @@ public class Employee {
      * @Size ensures the company name is not too long
      */
     @Size(max = 100, message = "Company name cannot exceed 100 characters")
+    @Schema(description = "Company name where employee works", example = "Tech Corp", maxLength = 100)
     private String company;
     
     /**
@@ -79,6 +86,7 @@ public class Employee {
      * being mapped to the database.
      */
     @Transient
+    @Schema(description = "Timestamp when the employee record was created", example = "2024-01-15T10:30:00", accessMode = Schema.AccessMode.READ_ONLY)
     private LocalDateTime creationTime = LocalDateTime.now();
 
     // Default constructor required by JPA
